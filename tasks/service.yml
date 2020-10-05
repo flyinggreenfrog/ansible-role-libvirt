@@ -1,0 +1,28 @@
+---
+- name: "service variables - ensure validated"
+  assert:
+    that:
+      - "{{ item.test }}"
+    quiet: True
+  loop:
+    - test: "{{ libvirt__services_state in ['started', 'stopped'] }}"
+      msg: "libvirt__services_state in ['started', 'stopped'] ->
+        '{{ libvirt__services_state }}'"
+    - test: "{{ libvirt__services_enabled is boolean }}"
+      msg: "libvirt__services_enabled is boolean ->
+        '{{ libvirt__services_enabled }}'"
+    - test: "{{ libvirt__services | type_debug == 'list' }}"
+      msg: "libvirt__services is list -> '{{ libvirt__services }}'"
+  loop_control:
+    label: "{{ item.msg }}"
+
+- name: "services - ensure state"
+  service:
+    name: "{{ item }}"
+    state: "{{ libvirt__services_state }}"
+    enabled: "{{ libvirt__services_enabled }}"
+  loop: "{{ libvirt__services }}"
+  loop_control:
+    label: "{{ item }} - ensure
+      {{ libvirt__services_state }} and
+      {{ libvirt__services_enabled | ternary('enabled', 'disabled') }}"

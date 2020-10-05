@@ -1,0 +1,19 @@
+---
+- name: "install variables - ensure validated"
+  assert:
+    that:
+      - "{{ item.test }}"
+    quiet: True
+  loop:
+    - test: "{{ libvirt__packages_state in ['present', 'absent'] }}"
+      msg: "libvirt__packages_state in ['present', 'absent'] ->
+        '{{ libvirt__packages_state }}'"
+    - test: "{{ libvirt__packages | type_debug == 'list' }}"
+      msg: "libvirt__packages is list -> '{{ libvirt__packages }}'"
+  loop_control:
+    label: "{{ item.msg }}"
+
+- name: "packages - ensure state"
+  package:
+    name: "{{ libvirt__packages }}"
+    state: "{{ libvirt__packages_state }}"

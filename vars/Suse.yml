@@ -1,0 +1,16 @@
+---
+libvirt__packages:
+  - patterns-server-kvm_server
+  - patterns-server-kvm_tools
+  - qemu
+  - qemu-kvm
+  - libvirt
+  - libvirt-bash-completion
+  - virt-manager
+  - virt-install
+  - virt-viewer
+  # needed for ansible virt_pool / virt_net
+  - python3-libvirt-python
+  - python3-lxml
+libvirt__services:
+  - libvirtd

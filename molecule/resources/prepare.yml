@@ -1,0 +1,15 @@
+---
+- name: Prepare
+  hosts: all
+  become: True
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+  tasks:
+    - name: "needed packages - ensure installed"
+      package:
+        state: present
+        name:
+          - python3
+          - patterns-base-minimal_base
+          - patterns-base-basesystem
+      when: "ansible_os_family == 'Suse'"

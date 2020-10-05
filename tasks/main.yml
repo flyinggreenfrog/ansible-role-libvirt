@@ -1,0 +1,48 @@
+---
+- name: "main variables - ensure validated"
+  assert:
+    that:
+      - "{{ item.test }}"
+    quiet: True
+  loop:
+    - test: "{{ libvirt__packages_manage is boolean }}"
+      msg: "libvirt__packages_manage is boolean ->
+        '{{ libvirt__packages_manage }}'"
+    - test: "{{ libvirt__services_manage is boolean }}"
+      msg: "libvirt__services_manage is boolean ->
+        '{{ libvirt__services_manage }}'"
+    - test: "{{ libvirt__users_authorize is boolean }}"
+      msg: "libvirt__users_authorize is boolean ->
+        '{{ libvirt__users_authorize }}'"
+    - test: "{{ libvirt__nested_virtualization is boolean }}"
+      msg: "libvirt__nested_virtualization is boolean ->
+        '{{ libvirt__nested_virtualization }}'"
+  loop_control:
+    label: "{{ item.msg }}"
+
+- name: "user existence - ensure checked"
+  getent:
+    database: passwd
+    key: "{{ item.user }}"
+  loop: "{{ libvirt__users }}"
+  loop_control:
+    label: "libvirt__users: {{ item.user }}"
+
+- name: "OS family specific variables - ensure included"
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: libvirt
+
+- import_tasks: install.yml
+  when: libvirt__packages_manage
+  tags: libvirt, online
+
+- import_tasks: config.yml
+  tags: libvirt
+
+- import_tasks: service.yml
+  when: libvirt__services_manage
+  tags: libvirt
+
+- import_tasks: pool_default.yml
+  when: libvirt__pool_default_manage
+  tags: libvirt

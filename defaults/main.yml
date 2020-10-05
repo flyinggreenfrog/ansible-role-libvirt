@@ -1,0 +1,14 @@
+---
+libvirt__packages_manage: True
+libvirt__packages_state: present
+libvirt__services_manage: True
+libvirt__services_enabled: True
+libvirt__services_state: started
+libvirt__users:
+  - user: vagrant
+libvirt__users_authorize: False
+libvirt__nested_virtualization: False
+libvirt__pool_default_manage: True
+libvirt__pool_default_state: active
+libvirt__pool_default_autostart: True
+libvirt__pool_default_dir: /var/lib/libvirt/images

@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+  become: True
+  vars:
+    libvirt__users: []
+  roles:
+    - flyinggreenfrog.libvirt
