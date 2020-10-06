@@ -25,5 +25,6 @@ provisioner:
       all:
         libvirt__users:
           - user: vagrant
+        libvirt__users_authorize: True
 verifier:
   name: ansible

@@ -5,6 +5,9 @@
       - "{{ item.test }}"
     quiet: True
   loop:
+    - test: "{{ libvirt__users | type_debug == 'list' }}"
+      msg: "libvirt__users is list ->
+        '{{ libvirt__users }}'"
     - test: "{{ libvirt__packages_manage is boolean }}"
       msg: "libvirt__packages_manage is boolean ->
         '{{ libvirt__packages_manage }}'"

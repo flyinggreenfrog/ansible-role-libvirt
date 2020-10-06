@@ -1,6 +1,1 @@
----
-- name: Converge
-  hosts: all
-  become: True
-  roles:
-    - flyinggreenfrog.libvirt
+../resources/converge.yml
