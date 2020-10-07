@@ -22,6 +22,7 @@
         '{{ libvirt__nested_virtualization }}'"
   loop_control:
     label: "{{ item.msg }}"
+  tags: libvirt
 
 - name: "user existence - ensure checked"
   getent:
@@ -30,6 +31,7 @@
   loop: "{{ libvirt__users }}"
   loop_control:
     label: "libvirt__users: {{ item.user }}"
+  tags: libvirt
 
 - name: "OS family specific variables - ensure included"
   include_vars: "{{ ansible_os_family }}.yml"
