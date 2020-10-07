@@ -3,4 +3,4 @@
   hosts: all
   become: True
   roles:
-    - flyinggreenfrog.libvirt
+    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
