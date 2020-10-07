@@ -1,4 +1,5 @@
 ---
+libvirt__quiet: True
 libvirt__packages_manage: True
 libvirt__packages_state: present
 libvirt__services_manage: True

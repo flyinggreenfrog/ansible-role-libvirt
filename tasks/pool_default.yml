@@ -2,18 +2,19 @@
 - name: "pool_default variables - ensure validated"
   assert:
     that:
-      - "{{ item.test }}"
+      - "{{ item.result }}"
     quiet: True
   loop:
-    - test: "{{ libvirt__pool_default_state in
+    - result: "{{ libvirt__pool_default_state in
         ['active', 'inactive', 'absent'] }}"
-      msg: "libvirt__pool_default_state in ['active', 'inactive', 'absent'] ->
-        '{{ libvirt__pool_default_state }}'"
-    - test: "{{ libvirt__pool_default_autostart is boolean }}"
-      msg: "libvirt__pool_default_autostart is boolean ->
-        '{{ libvirt__pool_default_autostart }}'"
+      description: "libvirt__pool_default_state in
+        ['active', 'inactive', 'absent']"
+      value: "{{ libvirt__pool_default_state }}"
+    - result: "{{ libvirt__pool_default_autostart is boolean }}"
+      description: "libvirt__pool_default_autostart is boolean"
+      value: "{{ libvirt__pool_default_autostart }}"
   loop_control:
-    label: "{{ item.msg }}"
+    label: "{{ item.description }}"
 
 - name: "pool default dir - ensure created"
   file:

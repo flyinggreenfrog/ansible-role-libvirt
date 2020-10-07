@@ -2,26 +2,26 @@
 - name: "main variables - ensure validated"
   assert:
     that:
-      - "{{ item.test }}"
-    quiet: True
+      - "{{ item.result }}"
+    quiet: "{{ libvirt__quiet }}"
   loop:
-    - test: "{{ libvirt__users | type_debug == 'list' }}"
-      msg: "libvirt__users is list ->
-        '{{ libvirt__users }}'"
-    - test: "{{ libvirt__packages_manage is boolean }}"
-      msg: "libvirt__packages_manage is boolean ->
-        '{{ libvirt__packages_manage }}'"
-    - test: "{{ libvirt__services_manage is boolean }}"
-      msg: "libvirt__services_manage is boolean ->
-        '{{ libvirt__services_manage }}'"
-    - test: "{{ libvirt__users_authorize is boolean }}"
-      msg: "libvirt__users_authorize is boolean ->
-        '{{ libvirt__users_authorize }}'"
-    - test: "{{ libvirt__nested_virtualization is boolean }}"
-      msg: "libvirt__nested_virtualization is boolean ->
-        '{{ libvirt__nested_virtualization }}'"
+    - result: "{{ libvirt__users | type_debug == 'list' }}"
+      description: "libvirt__users is list"
+      value: "{{ libvirt__users | type_debug }}"
+    - result: "{{ libvirt__packages_manage is boolean }}"
+      description: "libvirt__packages_manage is boolean"
+      value: "{{ libvirt__packages_manage }}"
+    - result: "{{ libvirt__services_manage is boolean }}"
+      description: "libvirt__services_manage is boolean"
+      value: "{{ libvirt__services_manage }}"
+    - result: "{{ libvirt__users_authorize is boolean }}"
+      description: "libvirt__users_authorize is boolean"
+      value: "{{ libvirt__users_authorize }}"
+    - result: "{{ libvirt__nested_virtualization is boolean }}"
+      description: "libvirt__nested_virtualization is boolean"
+      value: "{{ libvirt__nested_virtualization }}"
   loop_control:
-    label: "{{ item.msg }}"
+    label: "{{ item.description }}"
   tags: libvirt
 
 - name: "user existence - ensure checked"

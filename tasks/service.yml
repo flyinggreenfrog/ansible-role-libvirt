@@ -2,19 +2,20 @@
 - name: "service variables - ensure validated"
   assert:
     that:
-      - "{{ item.test }}"
-    quiet: True
+      - "{{ item.result }}"
+    quiet: "{{ libvirt__quiet }}"
   loop:
-    - test: "{{ libvirt__services_state in ['started', 'stopped'] }}"
-      msg: "libvirt__services_state in ['started', 'stopped'] ->
-        '{{ libvirt__services_state }}'"
-    - test: "{{ libvirt__services_enabled is boolean }}"
-      msg: "libvirt__services_enabled is boolean ->
-        '{{ libvirt__services_enabled }}'"
-    - test: "{{ libvirt__services | type_debug == 'list' }}"
-      msg: "libvirt__services is list -> '{{ libvirt__services }}'"
+    - result: "{{ libvirt__services_state in ['started', 'stopped'] }}"
+      description: "libvirt__services_state in ['started', 'stopped']"
+      value: "{{ libvirt__services_state }}"
+    - result: "{{ libvirt__services_enabled is boolean }}"
+      description: "libvirt__services_enabled is boolean"
+      value: "{{ libvirt__services_enabled }}"
+    - result: "{{ libvirt__services | type_debug == 'list' }}"
+      description: "libvirt__services is list"
+      value: "{{ libvirt__services | type_debug }}"
   loop_control:
-    label: "{{ item.msg }}"
+    label: "{{ item.description }}"
 
 - name: "services - ensure state"
   service:
