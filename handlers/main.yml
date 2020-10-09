@@ -2,7 +2,7 @@
 # Restarting of libvirtd will not affect running VMs
 # https://wiki.libvirt.org/page/FAQ#Will_restarting_the_libvirt_daemon_stop_my_virtual_machines.3F
 
-- name: "restart libvirtd"
+- name: 'restart libvirtd'
   service:
-    name: libvirtd
-    state: restarted
+    name: 'libvirtd'
+    state: 'restarted'

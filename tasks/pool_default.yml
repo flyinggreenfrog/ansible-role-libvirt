@@ -1,44 +1,27 @@
 ---
-- name: "pool_default variables - ensure validated"
-  assert:
-    that:
-      - "{{ item.result }}"
-    quiet: True
-  loop:
-    - result: "{{ libvirt__pool_default_state in
-        ['active', 'inactive', 'absent'] }}"
-      description: "libvirt__pool_default_state in
-        ['active', 'inactive', 'absent']"
-      value: "{{ libvirt__pool_default_state }}"
-    - result: "{{ libvirt__pool_default_autostart is boolean }}"
-      description: "libvirt__pool_default_autostart is boolean"
-      value: "{{ libvirt__pool_default_autostart }}"
-  loop_control:
-    label: "{{ item.description }}"
-
-- name: "pool default dir - ensure created"
+- name: 'pool default dir - ensure created'
   file:
-    state: directory
-    path: "{{ libvirt__pool_default_dir }}"
-    owner: root
-    group: root
-    mode: 0755
+    path: '{{ libvirt__pool_default_dir }}'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
   when: libvirt__pool_default_state != 'absent'
 
-- name: "pool default - ensure defined"
+- name: 'pool default - ensure defined'
   virt_pool:
-    command: define
-    name: default
+    name: 'default'
+    command: 'define'
     xml: "{{ lookup('template', 'pool-default.xml.j2') }}"
-  when: "libvirt__pool_default_state != 'absent'"
-
-- name: "pool default - ensure autostart"
-  virt_pool:
-    name: default
-    autostart: "{{ libvirt__pool_default_autostart }}"
   when: libvirt__pool_default_state != 'absent'
 
-- name: "pool default - ensure state"
+- name: 'pool default - ensure autostart'
   virt_pool:
-    name: default
-    state: "{{ libvirt__pool_default_state }}"
+    name: 'default'
+    autostart: '{{ libvirt__pool_default_autostart }}'
+  when: libvirt__pool_default_state != 'absent'
+
+- name: 'pool default - ensure state'
+  virt_pool:
+    name: 'default'
+    state: '{{ libvirt__pool_default_state }}'

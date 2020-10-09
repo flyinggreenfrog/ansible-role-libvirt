@@ -1,53 +1,27 @@
 ---
-- name: "main variables - ensure validated"
-  assert:
-    that:
-      - "{{ item.result }}"
-    quiet: "{{ libvirt__quiet }}"
-  loop:
-    - result: "{{ libvirt__users | type_debug == 'list' }}"
-      description: "libvirt__users is list"
-      value: "{{ libvirt__users | type_debug }}"
-    - result: "{{ libvirt__packages_manage is boolean }}"
-      description: "libvirt__packages_manage is boolean"
-      value: "{{ libvirt__packages_manage }}"
-    - result: "{{ libvirt__services_manage is boolean }}"
-      description: "libvirt__services_manage is boolean"
-      value: "{{ libvirt__services_manage }}"
-    - result: "{{ libvirt__users_authorize is boolean }}"
-      description: "libvirt__users_authorize is boolean"
-      value: "{{ libvirt__users_authorize }}"
-    - result: "{{ libvirt__nested_virtualization is boolean }}"
-      description: "libvirt__nested_virtualization is boolean"
-      value: "{{ libvirt__nested_virtualization }}"
-  loop_control:
-    label: "{{ item.description }}"
-  tags: libvirt
-
-- name: "user existence - ensure checked"
-  getent:
-    database: passwd
-    key: "{{ item.user }}"
-  loop: "{{ libvirt__users }}"
-  loop_control:
-    label: "libvirt__users: {{ item.user }}"
-  tags: libvirt
-
-- name: "OS family specific variables - ensure included"
+- name: 'OS family specific variables - ensure included'
+  tags: 'libvirt'
   include_vars: "{{ ansible_os_family }}.yml"
-  tags: libvirt
 
-- import_tasks: install.yml
+- name: 'assert tasks - ensure imported'
+  tags: 'libvirt'
+  import_tasks: 'assert.yml'
+
+- name: 'packages tasks - ensure imported'
+  tags: ['libvirt', 'online']
+  import_tasks: 'packages.yml'
   when: libvirt__packages_manage
-  tags: libvirt, online
 
-- import_tasks: config.yml
-  tags: libvirt
+- name: 'config tasks - ensure imported'
+  tags: 'libvirt'
+  import_tasks: 'config.yml'
 
-- import_tasks: service.yml
+- name: 'services tasks - ensure imported'
+  tags: 'libvirt'
+  import_tasks: 'services.yml'
   when: libvirt__services_manage
-  tags: libvirt
 
-- import_tasks: pool_default.yml
+- name: 'default pool tasks - ensure imported'
+  tags: 'libvirt'
+  import_tasks: 'pool_default.yml'
   when: libvirt__pool_default_manage
-  tags: libvirt

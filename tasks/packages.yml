@@ -1,0 +1,5 @@
+---
+- name: 'packages - ensure state'
+  package:
+    name: '{{ libvirt__packages }}'
+    state: '{{ libvirt__packages_state }}'

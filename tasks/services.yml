@@ -1,0 +1,11 @@
+---
+- name: 'services - ensure state'
+  service:
+    name: '{{ item }}'
+    state: '{{ libvirt__services_state }}'
+    enabled: '{{ libvirt__services_enabled }}'
+  loop_control:
+    label: "{{ item }} - ensure
+      {{ libvirt__services_state }} and
+      {{ libvirt__services_enabled | ternary('enabled', 'disabled') }}"
+  loop: '{{ libvirt__services }}'

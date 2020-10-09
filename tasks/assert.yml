@@ -1,0 +1,47 @@
+---
+- name: 'variables - ensure validated'
+  assert:
+    that:
+      - "lookup('vars', item.a, defaults='NOT DEFINED') {{ item.b }}"
+    fail_msg: "{{ item.a }}
+      == '{{ lookup('vars', item.a, defaults='NOT DEFINED') }}'"
+    quiet: True
+  loop_control:
+    label: '{{ item.a }}'
+  loop:
+    - a: 'libvirt__packages_manage'
+      b: 'is boolean'
+    - a: 'libvirt__packages_state'
+      b: "in ['present', 'absent']"
+    - a: 'libvirt__packages'
+      b: 'is sequence'
+    - a: 'libvirt__services_manage'
+      b: 'is boolean'
+    - a: 'libvirt__services_enabled'
+      b: 'is boolean'
+    - a: 'libvirt__services_state'
+      b: "in ['started', 'stopped']"
+    - a: 'libvirt__services'
+      b: 'is sequence'
+    - a: 'libvirt__users'
+      b: 'is sequence'
+    - a: 'libvirt__users_authorize'
+      b: 'is boolean'
+    - a: 'libvirt__nested_virtualization'
+      b: 'is boolean'
+    - a: 'libvirt__pool_default_manage'
+      b: 'is boolean'
+    - a: 'libvirt__pool_default_state'
+      b: "in ['active', 'inactive', 'absent']"
+    - a: 'libvirt__pool_default_autostart'
+      b: 'is boolean'
+    - a: 'libvirt__pool_default_dir'
+      b: 'is string'
+
+- name: 'user existence - ensure checked'
+  getent:
+    database: 'passwd'
+    key: '{{ item.user }}'
+  loop_control:
+    label: '{{ item.user }}'
+  loop: '{{ libvirt__users }}'

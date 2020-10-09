@@ -1,56 +1,56 @@
 ---
-- name: "libvirtd.conf - ensure configured"
+- name: 'libvirtd.conf - ensure configured'
   template:
-    dest: /etc/libvirt/libvirtd.conf
-    src: libvirtd.conf.j2
-    owner: root
-    group: root
-    mode: 0444
-  notify: restart libvirtd
+    dest: '/etc/libvirt/libvirtd.conf'
+    src: 'libvirtd.conf.j2'
+    owner: 'root'
+    group: 'root'
+    mode: '0444'
+  notify: 'restart libvirtd'
 
 - block:
-    - name: "groupmemberships - ensure present"
+    - name: 'groupmemberships - ensure present'
       user:
-        name: "{{ item.user }}"
+        name: '{{ item.user }}'
         groups:
-          - kvm
-          - qemu
-          - libvirt
+          - 'kvm'
+          - 'qemu'
+          - 'libvirt'
         append: True
-      loop: "{{ libvirt__users }}"
+      loop: '{{ libvirt__users }}'
       loop_control:
-        label: "{{ item.user }}"
-      when: "item.user != 'root'"
+        label: '{{ item.user }}'
+      when: item.user != 'root'
 
-    - name: polkit group libvirt - ensure configured
+    - name: 'polkit group libvirt - ensure configured'
       template:
-        dest: /etc/polkit-1/rules.d/10-virt.rules
-        src: 10-virt.rules.j2
-        owner: root
-        group: root
-        mode: 0444
+        dest: '/etc/polkit-1/rules.d/10-virt.rules'
+        src: '10-virt.rules.j2'
+        owner: 'root'
+        group: 'root'
+        mode: '0444'
   when: libvirt__users_authorize
 
 - block:
-    - name: "kvm nested virtualization - ensure configured"
+    - name: 'kvm nested virtualization - ensure configured'
       template:
-        dest: /etc/modprobe.d/99-kvm.conf
-        src: 99-kvm.conf.j2
-        owner: root
-        group: root
-        mode: 0444
+        dest: '/etc/modprobe.d/99-kvm.conf'
+        src: '99-kvm.conf.j2'
+        owner: 'root'
+        group: 'root'
+        mode: '0444'
 
-    - name: "kvm intel nested virtualization - ensure checked
-        (if ansible task fails, reboot system and try again)"
-      command: cat /sys/module/kvm_intel/parameters/nested
-      register: command_intel_result
-      failed_when: "'N' == command_intel_result.stdout"
+    - name: 'kvm intel nested virtualization - ensure checked
+        (if ansible task fails, reboot system and try again)'
+      command: 'cat /sys/module/kvm_intel/parameters/nested'
+      register: libvirt__kvm_intel_r
+      failed_when: "'N' == libvirt__kvm_intel_r.stdout"
       changed_when: False
 
-    - name: "kvm amd nested virtualization - ensure checked
-        (if ansible task fails, reboot system and try again)"
-      command: cat /sys/module/kvm_amd/parameters/nested
-      register: command_amd_result
-      failed_when: "'0' == command_amd_result.stdout"
+    - name: 'kvm amd nested virtualization - ensure checked
+        (if ansible task fails, reboot system and try again)'
+      command: 'cat /sys/module/kvm_amd/parameters/nested'
+      register: libvirt__kvm_amd_r
+      failed_when: "'0' == libvirt__kvm_amd_r.stdout"
       changed_when: False
   when: libvirt__nested_virtualization
